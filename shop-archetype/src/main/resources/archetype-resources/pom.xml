@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 由 shop-archetype 生成。约定与 myddd-template 一致：
+         不继承 myddd-parent，只 import myddd-dependencies BOM 取版本。 -->
+    <groupId>${groupId}</groupId>
+    <artifactId>${artifactId}</artifactId>
+    <version>${version}</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.release>21</maven.compiler.release>
+        <myddd.version>${mydddVersion}</myddd.version>
+        <spring-boot.version>${springBootVersion}</spring-boot.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.deep361.myddd</groupId>
+                <artifactId>myddd-dependencies</artifactId>
+                <version>${myddd.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- 内核：领域模型 + 通用返回体 + 端口 -->
+        <dependency>
+            <groupId>org.deep361.myddd</groupId>
+            <artifactId>myddd-kernel-ddd</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.deep361.myddd</groupId>
+            <artifactId>myddd-kernel-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.deep361.myddd</groupId>
+            <artifactId>myddd-kernel-port</artifactId>
+        </dependency>
+        <!-- 领域事件与 @Domain 扫描 -->
+        <dependency>
+            <groupId>org.deep361.myddd</groupId>
+            <artifactId>myddd-domain-starter</artifactId>
+        </dependency>
+        <!-- 统一返回体、全局异常、traceId -->
+        <dependency>
+            <groupId>org.deep361.myddd</groupId>
+            <artifactId>myddd-web-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- 架构守卫：一条 MydddArchitectureSpec.verify("${package}") 就够，规则由框架维护 -->
+        <dependency>
+            <groupId>org.deep361.myddd</groupId>
+            <artifactId>myddd-archunit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.16.0</version>
+                <configuration>
+                    <!-- SpEL 键（@Idempotent(key = "#form.token")）依赖真实参数名 -->
+                    <parameters>true</parameters>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.6.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

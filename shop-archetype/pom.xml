@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.acme.shop</groupId>
+        <artifactId>myddd-template</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>shop-archetype</artifactId>
+    <packaging>maven-archetype</packaging>
+    <name>shop-archetype</name>
+    <description>
+        mvn archetype:generate 的骨架：单模块五个分层包（contract/domain/application/infrastructure/api）
+        + 启动类 + @Domain 标记 + 架构守卫测试。多模块形态见本仓的六个 shop-* 模块，照抄即可。
+    </description>
+
+    <build>
+        <!-- archetype-packaging 提供 maven-archetype 生命周期：打骨架 + 用
+             src/test/resources/projects 里的属性文件真实生成并构建一次，防止"骨架只有形、生成物编不过"。 -->
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.archetype</groupId>
+                <artifactId>archetype-packaging</artifactId>
+                <version>${maven-archetype-plugin.version}</version>
+            </extension>
+        </extensions>
+
+        <!-- 骨架文件本身是 Velocity 模板，绝不能被 Maven 的资源过滤二次替换 -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+    </build>
+</project>

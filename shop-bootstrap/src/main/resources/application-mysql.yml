@@ -1,0 +1,16 @@
+# devbox / 生产形态：MySQL + （可选）Redis 缓存。
+# 连接串一律走环境变量，口令不进仓库；devbox 的默认值见 myddd-devbox 的 .env.example。
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYDDD_MYSQL_URL:jdbc:mysql://127.0.0.1:3306/shop_app?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false}
+    username: ${MYDDD_MYSQL_USERNAME:myddd}
+    password: ${MYDDD_MYSQL_PASSWORD:}
+  sql:
+    init:
+      # 迁移是业务自己的事（Flyway/Liquibase），样例只在明确指示时建表
+      mode: never
+
+myddd:
+  cache:
+    type: caffeine

@@ -1,0 +1,48 @@
+# 缺省 profile：零外部依赖，clone 下来 ./mvnw spring-boot:run 就能跑（H2 内存库 + Caffeine + 本地调度）。
+# 接 devbox（MySQL/Redis/RocketMQ/XXL-Job）时切 --spring.profiles.active=mysql，业务代码一行不改。
+spring:
+  application:
+    name: shop
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:shop;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password: ""
+  sql:
+    init:
+      mode: always
+
+myddd:
+  # —— provider 仲裁键：多套 provider 同时在 classpath 时由这些键决定用谁（含糊即拒绝启动）——
+  auth:
+    provider: satoken
+  limiter:
+    provider: sentinel
+    sentinel:
+      rule-source: memory
+  job:
+    provider: spring
+  # —— 能力面 ——
+  cache:
+    type: caffeine
+    cache-names:
+      - shop-points
+  consistency:
+    # 样例不接 Redisson：分布式锁关闭，幂等改用 DB 占位表（myddd_idempotent_record）
+    lock:
+      enabled: false
+    idempotent:
+      store: db
+  domain:
+    # 进程内事件够用；要跨进程投递才打开 outbox（需 myddd_outbox 表 + MQ provider）
+    outbox:
+      enabled: false
+  mq:
+    enabled: false
+  web:
+    openapi:
+      enabled: false
+
+logging:
+  level:
+    com.acme.shop: INFO

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor
+        xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.1.0
+                            https://maven.apache.org/xsd/archetype-descriptor-1.1.0.xsd"
+        name="myddd-project">
+
+    <!-- 两个必填项决定生成物的版本坐标：框架版本与 Spring Boot 版本。
+         写成 requiredProperty 而不是硬编码，是为了让"升级框架"成为一次命令行参数而不是改模板。 -->
+    <requiredProperties>
+        <requiredProperty key="mydddVersion">
+            <defaultValue>1.0.0-SNAPSHOT</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="springBootVersion">
+            <defaultValue>4.1.1</defaultValue>
+        </requiredProperty>
+    </requiredProperties>
+
+    <fileSets>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+            <directory>src/main/java</directory>
+            <includes>
+                <include>**/*.java</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" encoding="UTF-8">
+            <directory>src/main/resources</directory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+            <directory>src/test/java</directory>
+            <includes>
+                <include>**/*.java</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</archetype-descriptor>
